@@ -1,8 +1,10 @@
 from fastapi import FastAPI
 from app.schemas import SymptomRequest
 from ml.model import predict_disease
+from database.operations import save_prediction, get_prediction_history
 
 app = FastAPI()
+
 
 @app.get("/")
 def home():
@@ -10,11 +12,16 @@ def home():
         "message": "Welcome to AI Health Companion API"
     }
 
+
 @app.get("/health")
 def health():
     return {
         "status": "API is running successfully"
     }
+@app.get("/history")
+def history():
+
+    return get_prediction_history()
 
 @app.post("/predict")
 def predict(request: SymptomRequest):
@@ -26,9 +33,13 @@ def predict(request: SymptomRequest):
     if "error" in result:
         return result
 
-    return {
+    response = {
         "prediction": result["prediction"],
         "confidence": result["confidence"],
         "top3_predictions": result["top3_predictions"],
         "symptoms": request.symptoms
     }
+
+    save_prediction(response)
+
+    return response
