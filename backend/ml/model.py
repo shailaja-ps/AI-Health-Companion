@@ -1,5 +1,6 @@
 import joblib
 import pandas as pd
+import numpy as np
 
 # Load model
 model = joblib.load("models/disease_prediction_model.pkl")
@@ -10,16 +11,39 @@ train_data = train_data.loc[:, ~train_data.columns.str.contains("^Unnamed")]
 
 features = train_data.drop("prognosis", axis=1).columns
 
-
 def predict_disease(symptoms):
+
     input_data = {feature: 0 for feature in features}
+
+    invalid_symptoms = []
 
     for symptom in symptoms:
         if symptom in input_data:
             input_data[symptom] = 1
+        else:
+            invalid_symptoms.append(symptom)
+
+    if invalid_symptoms:
+        return {
+            "error": f"Invalid symptom(s): {', '.join(invalid_symptoms)}"
+        }
 
     input_df = pd.DataFrame([input_data])
 
-    prediction = model.predict(input_df)
+    probabilities = model.predict_proba(input_df)[0]
 
-    return prediction[0]
+    top3_indices = np.argsort(probabilities)[-3:][::-1]
+
+    top3_predictions = []
+
+    for index in top3_indices:
+        top3_predictions.append({
+            "disease": model.classes_[index],
+            "confidence": f"{round(probabilities[index]*100,2)}%"
+        })
+
+    return {
+        "prediction": top3_predictions[0]["disease"],
+        "confidence": top3_predictions[0]["confidence"],
+        "top3_predictions": top3_predictions
+    }

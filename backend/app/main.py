@@ -21,11 +21,14 @@ def predict(request: SymptomRequest):
 
     print("Received Symptoms:", request.symptoms)
 
-    prediction = predict_disease(request.symptoms)
+    result = predict_disease(request.symptoms)
 
-    print("Prediction:", prediction)
+    if "error" in result:
+        return result
 
     return {
-        "prediction": prediction,
+        "prediction": result["prediction"],
+        "confidence": result["confidence"],
+        "top3_predictions": result["top3_predictions"],
         "symptoms": request.symptoms
     }
