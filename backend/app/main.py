@@ -2,8 +2,15 @@ from fastapi import FastAPI
 from app.schemas import SymptomRequest
 from ml.model import predict_disease
 from database.operations import save_prediction, get_prediction_history
-
+from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/")

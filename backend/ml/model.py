@@ -33,17 +33,16 @@ def predict_disease(symptoms):
     probabilities = model.predict_proba(input_df)[0]
 
     top3_indices = np.argsort(probabilities)[-3:][::-1]
-
     top3_predictions = []
-
     for index in top3_indices:
         top3_predictions.append({
             "disease": model.classes_[index],
-            "confidence": f"{round(probabilities[index]*100,2)}%"
-        })
+            "confidence": round(float(probabilities[index] * 100), 2)
+    })
+        return {
+            "prediction": top3_predictions[0]["disease"],
+            "confidence": round(float(top3_predictions[0]["confidence"]), 2),
+            "top3_predictions": top3_predictions
+}
 
-    return {
-        "prediction": top3_predictions[0]["disease"],
-        "confidence": top3_predictions[0]["confidence"],
-        "top3_predictions": top3_predictions
-    }
+    
