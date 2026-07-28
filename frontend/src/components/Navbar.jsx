@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 function Navbar() {
   return (
     <nav className="bg-blue-600 text-white shadow-md">
@@ -7,18 +9,29 @@ function Navbar() {
           🏥 AI Health Companion
         </h1>
 
-        <div className="space-x-8 font-medium">
-          <a href="/" className="hover:text-gray-200">
-            Home
-          </a>
+        <div className="flex items-center space-x-8 font-medium">
 
-          <a href="/history" className="hover:text-gray-200">
-            History
-          </a>
+          <Link
+            to="/"
+            className="hover:text-blue-200 transition"
+          >
+            🏠 Home
+          </Link>
 
-          <a href="#" className="hover:text-gray-200">
-            About
-          </a>
+          <Link
+            to="/history"
+            className="hover:text-blue-200 transition"
+          >
+            📜 History
+          </Link>
+
+          <Link
+            to="/about"
+            className="hover:text-blue-200 transition"
+          >
+            ℹ️ About
+          </Link>
+
         </div>
 
       </div>
