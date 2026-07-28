@@ -19,17 +19,17 @@ function Navbar() {
           </Link>
 
           <Link
+            to="/dashboard"
+            className="hover:text-blue-200 transition"
+          >
+            📊 Dashboard
+          </Link>
+
+          <Link
             to="/history"
             className="hover:text-blue-200 transition"
           >
             📜 History
-          </Link>
-
-          <Link
-            to="/about"
-            className="hover:text-blue-200 transition"
-          >
-            ℹ️ About
           </Link>
 
         </div>
