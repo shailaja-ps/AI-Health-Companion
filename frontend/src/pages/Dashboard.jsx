@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import DashboardCard from "../components/DashboardCard";
+import DiseaseBarChart from "../components/charts/DiseaseBarChart";
 import { getHistory } from "../services/api";
 
 function Dashboard() {
@@ -22,10 +23,6 @@ function Dashboard() {
       setLoading(false);
     }
   };
-
-  // ==========================
-  // Dashboard Statistics
-  // ==========================
 
   const totalPredictions = history.length;
 
@@ -66,26 +63,34 @@ function Dashboard() {
 
   const recentPredictions = [...history].reverse().slice(0, 5);
 
+  const chartData = Object.entries(diseaseCount).map(([disease, count]) => ({
+    disease,
+    count,
+  }));
+
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-100">
       <Navbar />
 
-      <div className="max-w-7xl mx-auto px-4 py-10">
+      <div className="max-w-7xl mx-auto px-6 py-10">
 
-        <h1 className="text-4xl font-bold text-center text-blue-700 mb-10">
-          📊 AI Health Companion Dashboard
-        </h1>
+        <div className="text-center mb-10">
+          <h1 className="text-5xl font-extrabold bg-gradient-to-r from-blue-700 to-cyan-500 bg-clip-text text-transparent">
+            AI Health Companion Dashboard
+          </h1>
+
+          <p className="text-gray-600 mt-3">
+            Analytics and prediction insights from your AI-powered healthcare assistant.
+          </p>
+        </div>
 
         {loading ? (
-          <p className="text-center text-gray-600">
+          <p className="text-center text-lg text-gray-600">
             Loading dashboard...
           </p>
         ) : (
           <>
-            {/* Dashboard Cards */}
-
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-10">
-
               <DashboardCard
                 title="Total Predictions"
                 value={totalPredictions}
@@ -120,64 +125,74 @@ function Dashboard() {
                 icon="🕒"
                 color="text-red-600"
               />
-
             </div>
 
-            {/* Recent Predictions */}
+            <div className="bg-white rounded-2xl shadow-lg p-6 mb-10">
+              <DiseaseBarChart data={chartData} />
+            </div>
 
-            <div className="bg-white rounded-xl shadow-md overflow-x-auto">
+            <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
 
-              <div className="bg-blue-600 text-white px-6 py-4 text-xl font-semibold">
-                Recent Predictions
+              <div className="bg-gradient-to-r from-blue-700 to-cyan-500 text-white px-6 py-4 text-xl font-bold">
+                📋 Recent Predictions
               </div>
 
               <table className="min-w-full">
 
                 <thead className="bg-gray-100">
                   <tr>
-                    <th className="px-4 py-3 text-left">Disease</th>
-                    <th className="px-4 py-3 text-left">Confidence</th>
-                    <th className="px-4 py-3 text-left">Date</th>
+                    <th className="px-6 py-4 text-left">Disease</th>
+                    <th className="px-6 py-4 text-left">Confidence</th>
+                    <th className="px-6 py-4 text-left">Date</th>
                   </tr>
                 </thead>
 
                 <tbody>
 
-                  {recentPredictions.map((item, index) => (
-                    <tr
-                      key={index}
-                      className="border-b hover:bg-gray-50"
-                    >
-                      <td className="px-4 py-3 font-medium">
-                        {item.prediction}
-                      </td>
+                  {recentPredictions.length > 0 ? (
+                    recentPredictions.map((item, index) => (
+                      <tr
+                        key={index}
+                        className="border-b hover:bg-blue-50 transition"
+                      >
+                        <td className="px-6 py-4 font-semibold">
+                          {item.prediction}
+                        </td>
 
-                      <td className="px-4 py-3">
-                        {Number(item.confidence).toFixed(2)}%
-                      </td>
+                        <td className="px-6 py-4 text-blue-700 font-bold">
+                          {Number(item.confidence).toFixed(2)}%
+                        </td>
 
-                      <td className="px-4 py-3">
-                        {new Date(item.timestamp).toLocaleDateString(
-                          "en-IN",
-                          {
-                            day: "2-digit",
-                            month: "short",
-                            year: "numeric",
-                          }
-                        )}
+                        <td className="px-6 py-4">
+                          {new Date(item.timestamp).toLocaleDateString(
+                            "en-IN",
+                            {
+                              day: "2-digit",
+                              month: "short",
+                              year: "numeric",
+                            }
+                          )}
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td
+                        colSpan="3"
+                        className="text-center py-8 text-gray-500"
+                      >
+                        No predictions available.
                       </td>
                     </tr>
-                  ))}
+                  )}
 
                 </tbody>
 
               </table>
 
             </div>
-
           </>
         )}
-
       </div>
     </div>
   );
