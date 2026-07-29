@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://127.0.0.1:8000",
+  baseURL: "https://ai-health-companion-mk5a.onrender.com",
 });
 
 // Predict disease
@@ -15,3 +15,5 @@ export const predictDisease = (symptoms) => {
 export const getHistory = () => {
   return API.get("/history");
 };
+
+export default API;
