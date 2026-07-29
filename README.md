@@ -143,6 +143,3 @@ Bachelor of Engineering in Artificial Intelligence & Machine Learning
 GitHub:
 https://github.com/Parniika2
 
----
-
-## ⭐ If you like this project, don't forget to star the repository!
