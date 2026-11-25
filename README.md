@@ -132,11 +132,7 @@ Accepts symptom inputs and returns the predicted disease.
 - Image-based Disease Detection
 - Cloud Storage Integration
 
----
 
-# 👨‍💻 Author
-
-**Parnika Y N**
 
 Bachelor of Engineering in Artificial Intelligence & Machine Learning
 
